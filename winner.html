@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ping Pong</title>
+    <title>Winner</title>
     <script>
         function newLocation() {
+            sessionStorage.setItem("winner", "None");
             window.location.href="game.html";
         }
     </script>
@@ -31,6 +32,11 @@
             font-family: 'Cinzel', serif;
         }
 
+        .winner{
+            font-size: 32px;
+            margin-bottom: 100px;
+        }
+
         button{
             font-family: 'Cinzel', serif;
             padding:10px 15px;
@@ -43,6 +49,11 @@
     </style>
 </head>
 <body>
-    <button onclick="newLocation()">Start</button>
+    <p class="winner"></p>
+    <button onclick="newLocation()">Play Again</button>
+    <script>
+        let winner = sessionStorage.getItem('winner');
+        document.getElementsByClassName('winner')[0].textContent = winner + " Wins ✨"
+    </script>
 </body>
 </html>
