@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ping Pong</title>
+    <!-- add some styles to the canvas -->
     <link href="./style.css" rel="stylesheet" />
 </head>
 
@@ -13,11 +14,14 @@
 
     <noscript>Your browser does not support JavaScript!</noscript>
 
+    <!-- This is the main canvas container -->
     <div class="canvas-container">
+        <!-- Jonny will play at top side -->
         <p>Jonny <span class="top">0</span></p>
         <div class="wrapper">
             <canvas id="container"></canvas>
         </div>
+        <!-- Jack will play at bottom side -->
         <p>Jack <span class="bottom">0</span></p>
     </div>
 
@@ -25,6 +29,16 @@
         <p>This game is currently not supported in mobile.</p>
     </div>
 
+    <script>
+        // show alert if the player is playing for the first time or showing highscorer and his score
+        let winner = localStorage.getItem("winner");
+        if(winner){
+            winner = JSON.parse(winner);
+            alert("Highscorer: "+ winner.highScorer.name + " Score: " + winner.highScorer.score);
+        }else{
+            alert("This is your first time");
+        }
+    </script>
     <script src="./script.js"></script>
 </body>
 

@@ -23,7 +23,7 @@ const topPlayer = {
     positionY: 10,
     color: 'white',
     player: 'top',
-    speed: 2
+    speed: 3
 }
 
 const bottomPlayer = {
@@ -33,7 +33,7 @@ const bottomPlayer = {
     positionY: canvas.height - 20,
     color: 'white',
     player: 'bottom',
-    speed: 2
+    speed: 3
 }
 
 /**
@@ -49,9 +49,7 @@ const game = {
 
 const keyPressed = {
     A: false,
-    D: false,
-    Left: false,
-    Right: false
+    D: false
 }
 
 let activated = true;
@@ -91,6 +89,7 @@ function drawAll() {
     drawBall()
 }
 
+// reset the ball
 function resetBall() {
     ball.positionX = canvas.width / 2 + 8
     ball.positionY = canvas.height / 2 + 8
@@ -107,7 +106,7 @@ function resetBall() {
     }, 1000)
 }
 
-
+// activating collision after 1s
 function collisionTimeLag() {
     activated = false
     console.log('Deactivated Collision')
@@ -124,8 +123,6 @@ function setScore() {
     if (ball.positionY > canvas.height - (bottomPlayer.height + ball.radius)) {
         winnerName = "Johnny";
         winnerScore = game.topScore;
-        // game.topScore++;
-        // resetBall();
 
         if(winner){
             winner = JSON.parse(winner);
@@ -173,8 +170,6 @@ function setScore() {
         }
         localStorage.setItem("winner", JSON.stringify(winner));
 
-        // game.bottomScore++;
-        // resetBall();
         window.location.href = "winner.html";
         resetGame();
     }
@@ -183,21 +178,7 @@ function setScore() {
     document.getElementsByClassName('bottom')[0].textContent = game.bottomScore;
 }
 
-function gameOver(){
-    // if(game.topScore === game.maxScore){
-    //     console.log('Left Wins')
-    //     localStorage.setItem("winner", "Johnny");
-    //     window.location.href = "winner.html";
-    //     resetGame()
-    // }else if(game.bottomScore === game.maxScore){
-    //     console.log('Right Wins')
-    //     localStorage.setItem("winner", "Jack");
-    //     window.location.href = "winner.html";
-    //     resetGame()
-    // }
-}
-
-
+// reset game
 function resetGame(){
     game.topScore = 0
     game.bottomScore = 0
@@ -212,24 +193,24 @@ function updateKeyPresses() {
         if (topPlayer.positionX > 0) {
             topPlayer.positionX -= topPlayer.speed;
         }
-    }
-    if (keyPressed['D']) {
-        if (topPlayer.positionX < canvas.width - topPlayer.width) {
-            topPlayer.positionX += topPlayer.speed;
-        }
-    }
-    if (keyPressed['A']) {
         if (bottomPlayer.positionX > 0) {
             bottomPlayer.positionX -= bottomPlayer.speed;
         }
     }
     if (keyPressed['D']) {
+        if (topPlayer.positionX < canvas.width - topPlayer.width) {
+            topPlayer.positionX += topPlayer.speed;
+        }
         if (bottomPlayer.positionX < canvas.width - bottomPlayer.width) {
             bottomPlayer.positionX += bottomPlayer.speed;
         }
     }
 }
 
+// update states 
+// check if ball hits the wall then bounce
+// check if the ball hits the rods of the player the n bounce
+// else game over and set the score
 function updateStates() {
     if ((ball.positionX + ball.radius) >= canvas.width || (ball.positionX - ball.radius) <= 0) {
         ball.velocityX = -ball.velocityX;
@@ -253,9 +234,10 @@ function updateStates() {
         }
     }
 
-    setScore();
-    gameOver();
+    // here game is being over
+    setScore(); // set score also check if game is over
 
+    // increase speed per bounce
     if (hits === game.speedIncreaseHit) {
         hits = 0;
         ball.velocityX += 0.2;
