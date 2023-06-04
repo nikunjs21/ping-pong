@@ -43,6 +43,16 @@
     </style>
 </head>
 <body>
-    <button onclick="newLocation()">Start</button>
+    <button disabled>Press Enter To Start</button>
+    <script>
+        document.addEventListener('keyup', (event) => {
+            var name = event.key;
+            var code = event.code;
+            console.log(code);
+            if (code === 'Enter' || code === 'NumpadEnter') {
+                newLocation()
+            }
+        }, false);
+    </script>
 </body>
 </html>

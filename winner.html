@@ -7,7 +7,6 @@
     <title>Winner</title>
     <script>
         function newLocation() {
-            localStorage.setItem("winner", "None");
             window.location.href="game.html";
         }
     </script>
@@ -18,6 +17,10 @@
             padding:0;
             margin: 0;
             box-sizing: border-box;
+        }
+
+        p{
+            font-size: 20px;
         }
 
         body{
@@ -37,6 +40,10 @@
             margin-bottom: 100px;
         }
 
+        #highScorer{
+            margin-bottom: 30px;
+        }
+
         button{
             font-family: 'Cinzel', serif;
             padding:10px 15px;
@@ -44,16 +51,28 @@
             background: black;
             border: 1px solid white;
             color: white;
-            cursor: pointer;
         }
     </style>
 </head>
 <body>
     <p class="winner"></p>
-    <button onclick="newLocation()">Play Again</button>
+    <p>HighScorer</p>
+    <p id="highScorer"></p>
+    <button disabled>Press Enter To Start</button>
     <script>
         let winner = localStorage.getItem('winner');
-        document.getElementsByClassName('winner')[0].textContent = winner + " Wins ✨"
+        winner = JSON.parse(winner);
+        document.getElementsByClassName('winner')[0].textContent = winner.winner + "("+ winner.score +")" + " Wins ✨"
+        document.getElementById("highScorer").textContent = winner.highScorer.name + "("+ winner.highScorer.score +")" + " 😎";
+
+        document.addEventListener('keyup', (event) => {
+            var name = event.key;
+            var code = event.code;
+            console.log(code);
+            if (code === 'Enter' || code === 'NumpadEnter') {
+                newLocation()
+            }
+        }, false);
     </script>
 </body>
 </html>
