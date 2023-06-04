@@ -3,7 +3,6 @@
  */
 const canvas = document.getElementById('container')
 const context = canvas.getContext("2d")
-localStorage.setItem("winner", "None");
 
 /**
  * Objects
@@ -119,12 +118,65 @@ function collisionTimeLag() {
 }
 
 function setScore() {
+    let winner = localStorage.getItem("winner");
+    let winnerName = "";
+    let winnerScore = 0;
     if (ball.positionY > canvas.height - (bottomPlayer.height + ball.radius)) {
-        game.topScore++;
-        resetBall();
+        winnerName = "Johnny";
+        winnerScore = game.topScore;
+        // game.topScore++;
+        // resetBall();
+
+        if(winner){
+            winner = JSON.parse(winner);
+            winner.winner = winnerName;
+            winner.score = winnerScore;
+            if(winner.highScorer.score <= winnerScore){
+                winner.highScorer.name = winnerName;
+                winner.highScorer.score = winnerScore;
+            }
+        }else{
+            winner = {
+                winner: winnerName,
+                score: winnerScore,
+                highScorer: {
+                    name: winnerName,
+                    score: winnerScore,
+                }
+            }
+        }
+        localStorage.setItem("winner", JSON.stringify(winner));
+
+        window.location.href = "winner.html";
+        resetGame();
     } else if (ball.positionY < topPlayer.height + ball.radius) {
-        game.bottomScore++;
-        resetBall();
+        winnerName = "Jack";
+        winnerScore = game.bottomScore;
+
+        if(winner){
+            winner = JSON.parse(winner);
+            winner.winner = winnerName;
+            winner.score = winnerScore;
+            if(winner.highScorer.score <= winnerScore){
+                winner.highScorer.name = winnerName;
+                winner.highScorer.score = winnerScore;
+            }
+        }else{
+            winner = {
+                winner: winnerName,
+                score: winnerScore,
+                highScorer: {
+                    name: winnerName,
+                    score: winnerScore,
+                }
+            }
+        }
+        localStorage.setItem("winner", JSON.stringify(winner));
+
+        // game.bottomScore++;
+        // resetBall();
+        window.location.href = "winner.html";
+        resetGame();
     }
 
     document.getElementsByClassName('top')[0].textContent = game.topScore;
@@ -132,17 +184,17 @@ function setScore() {
 }
 
 function gameOver(){
-    if(game.topScore === game.maxScore){
-        console.log('Left Wins')
-        localStorage.setItem("winner", "Johnny");
-        window.location.href = "winner.html";
-        resetGame()
-    }else if(game.bottomScore === game.maxScore){
-        console.log('Right Wins')
-        localStorage.setItem("winner", "Jack");
-        window.location.href = "winner.html";
-        resetGame()
-    }
+    // if(game.topScore === game.maxScore){
+    //     console.log('Left Wins')
+    //     localStorage.setItem("winner", "Johnny");
+    //     window.location.href = "winner.html";
+    //     resetGame()
+    // }else if(game.bottomScore === game.maxScore){
+    //     console.log('Right Wins')
+    //     localStorage.setItem("winner", "Jack");
+    //     window.location.href = "winner.html";
+    //     resetGame()
+    // }
 }
 
 
@@ -183,13 +235,17 @@ function updateStates() {
         ball.velocityX = -ball.velocityX;
     }
 
-    if (
-        (ball.positionY + ball.radius >= canvas.height - (bottomPlayer.height + 10) &&
-            (ball.positionX >= bottomPlayer.positionX && ball.positionX <= bottomPlayer.positionX + bottomPlayer.width)) ||
+    let bottomPlayerHits = (ball.positionY + ball.radius >= canvas.height - (bottomPlayer.height + 10) &&
+        (ball.positionX >= bottomPlayer.positionX && ball.positionX <= bottomPlayer.positionX + bottomPlayer.width));
 
-        (ball.positionY - ball.radius <= (topPlayer.height + 10) &&
-            (ball.positionX >= topPlayer.positionX && ball.positionX <= topPlayer.positionX + topPlayer.width))
-    ) {
+    let topPlayerHits = (ball.positionY - ball.radius <= (topPlayer.height + 10) &&
+        (ball.positionX >= topPlayer.positionX && ball.positionX <= topPlayer.positionX + topPlayer.width));
+
+    if (bottomPlayerHits || topPlayerHits) {
+
+        if(bottomPlayerHits) game.bottomScore++;
+        if(topPlayerHits) game.topScore++;
+
         if (activated) {
             hits++;
             ball.velocityY = -ball.velocityY;
