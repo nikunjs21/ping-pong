@@ -7,7 +7,7 @@
     <title>Winner</title>
     <script>
         function newLocation() {
-            sessionStorage.setItem("winner", "None");
+            localStorage.setItem("winner", "None");
             window.location.href="game.html";
         }
     </script>
@@ -52,7 +52,7 @@
     <p class="winner"></p>
     <button onclick="newLocation()">Play Again</button>
     <script>
-        let winner = sessionStorage.getItem('winner');
+        let winner = localStorage.getItem('winner');
         document.getElementsByClassName('winner')[0].textContent = winner + " Wins ✨"
     </script>
 </body>

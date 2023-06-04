@@ -3,8 +3,7 @@
  */
 const canvas = document.getElementById('container')
 const context = canvas.getContext("2d")
-sessionStorage.setItem("winner", "None");
-
+localStorage.setItem("winner", "None");
 
 /**
  * Objects
@@ -38,7 +37,6 @@ const bottomPlayer = {
     speed: 2
 }
 
-
 /**
  * Game
  */
@@ -60,8 +58,6 @@ const keyPressed = {
 let activated = true;
 let hits = 0;
 
-
-
 /**
  * Update and Draw
  */
@@ -80,22 +76,6 @@ function drawBottomPlayer() {
     context.fill();
     context.closePath();
 }
-// function drawLeftPlayer() {
-//     context.beginPath();
-//     context.fillStyle = leftPlayer.color;
-//     context.rect(leftPlayer.positionX, leftPlayer.positionY, leftPlayer.width, leftPlayer.height);
-//     context.fill();
-//     context.closePath();
-// }
-
-// function drawRightPlayer() {
-//     context.beginPath();
-//     context.fillStyle = rightPlayer.color;
-//     context.rect(rightPlayer.positionX, rightPlayer.positionY, rightPlayer.width, rightPlayer.height);
-//     context.fill();
-//     context.closePath();
-// }
-
 
 function drawBall() {
     context.beginPath();
@@ -105,16 +85,12 @@ function drawBall() {
     context.closePath();
 }
 
-
 function drawAll() {
     context.clearRect(0, 0, canvas.width, canvas.height);
-    // drawLeftPlayer()
-    // drawRightPlayer()
     drawTopPlayer();
     drawBottomPlayer();
     drawBall()
 }
-
 
 function resetBall() {
     ball.positionX = canvas.width / 2 + 8
@@ -155,29 +131,15 @@ function setScore() {
     document.getElementsByClassName('bottom')[0].textContent = game.bottomScore;
 }
 
-// function setScore() {
-//     if (ball.positionX > canvas.width - (rightPlayer.width)) {
-//         game.leftScore++
-//         resetBall()
-//     } else if (ball.positionX < rightPlayer.width) {
-//         game.rightScore++
-//         resetBall()
-//     }
-
-//     document.getElementsByClassName('left')[0].textContent = game.leftScore
-//     document.getElementsByClassName('right')[0].textContent = game.rightScore
-// }
-
-
 function gameOver(){
     if(game.topScore === game.maxScore){
         console.log('Left Wins')
-        sessionStorage.setItem("winner", "Top Player");
+        localStorage.setItem("winner", "Johnny");
         window.location.href = "winner.html";
         resetGame()
     }else if(game.bottomScore === game.maxScore){
         console.log('Right Wins')
-        sessionStorage.setItem("winner", "Bottom Player");
+        localStorage.setItem("winner", "Jack");
         window.location.href = "winner.html";
         resetGame()
     }
@@ -251,42 +213,6 @@ function updateStates() {
     ball.positionX += ball.velocityX;
     ball.positionY += ball.velocityY;
 }
-// function updateStates() {
-//     if ((ball.positionY + ball.radius) >= canvas.height || (ball.positionY - ball.radius) <= 0) {
-//         ball.velocityY = -ball.velocityY;
-//     }
-
-//     if (
-//         (ball.positionX + ball.radius >= canvas.width - (rightPlayer.width + 10) &&
-//             (ball.positionY >= rightPlayer.positionY && ball.positionY <= rightPlayer.positionY + rightPlayer.height)) ||
-
-//         (ball.positionX - ball.radius <= (leftPlayer.width + 10) &&
-//             (ball.positionY >= leftPlayer.positionY && ball.positionY <= leftPlayer.positionY + leftPlayer.height))
-//     ) {
-//         if (activated) {
-//             hits++;
-//             ball.velocityX = -ball.velocityX
-//             collisionTimeLag()
-//         }
-//     }
-
-//     setScore()
-//     gameOver()
-
-//     if(hits === game.speedIncreaseHit){
-//         hits = 0
-//         ball.velocityX += 0.2
-//         ball.velocityY += 0.2
-//         leftPlayer.speed += 0.2
-//         rightPlayer.speed += 0.2
-
-//         console.log(ball.velocityX, leftPlayer.speed);
-//     }
-
-//     ball.positionX += ball.velocityX;
-//     ball.positionY += ball.velocityY;
-// }
-
 
 /**
  * Key Listeners
@@ -303,8 +229,6 @@ document.addEventListener('keydown', (event) => {
     }
 }, false);
 
-
-
 document.addEventListener('keyup', (event) => {
     var name = event.key;
     var code = event.code;
@@ -315,8 +239,6 @@ document.addEventListener('keyup', (event) => {
         keyPressed['A'] = false;
     }
 }, false);
-
-
 
 /**
  * Game Loop and Render
@@ -329,9 +251,6 @@ function gameLoop() {
 }
 
 requestAnimationFrame(gameLoop);
-
-
-
 
 /**
  * Support
@@ -349,18 +268,7 @@ function updateDefault() {
     bottomPlayer.positionX = canvas.width / 2 - bottomPlayer.width / 2;
     bottomPlayer.positionY = canvas.height - (bottomPlayer.height + 10);
 }
-// function updateDefault() {
-//     canvas.width = Math.min(window.innerWidth * 0.6, 800)
-//     canvas.height = Math.min(window.innerHeight * 0.8, 600)
 
-//     ball.positionX = canvas.width / 2 + ball.radius
-//     ball.positionY = canvas.height / 2 + ball.radius
-
-//     leftPlayer.positionY = canvas.height / 2 - leftPlayer.height / 2
-
-//     rightPlayer.positionX = canvas.width - (rightPlayer.width + 10)
-//     rightPlayer.positionY = canvas.height / 2 - rightPlayer.height / 2
-// }
 function resizeHandler() {
     if (window.innerWidth < 560) {
         document.getElementsByClassName('small-device')[0].style.display = "flex";
@@ -375,17 +283,6 @@ function resizeHandler() {
     topPlayer.positionX = canvas.width / 2 - topPlayer.width / 2;
     bottomPlayer.positionX = canvas.width / 2 - bottomPlayer.width / 2;
 }
-// function resizeHandler() {
-//     if (window.innerWidth < 560) {
-//         document.getElementsByClassName('small-device')[0].style.display = "flex";
-//         document.getElementsByClassName('canvas-container')[0].style.display = "none";
-//     } else {
-//         document.getElementsByClassName('small-device')[0].style.display = "none";
-//         document.getElementsByClassName('canvas-container')[0].style.display = "flex";
-//     }
-
-//     updateDefault()
-// }
 
 resizeHandler()
 window.addEventListener('resize', () => { resizeHandler() })
