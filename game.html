@@ -34,7 +34,7 @@
         let winner = localStorage.getItem("winner");
         if(winner){
             winner = JSON.parse(winner);
-            alert("Highscorer: "+ winner.highScorer.name + " Score: " + winner.highScorer.score);
+            alert("Highscorer: "+ winner.highScorer.name + " | Score: " + winner.highScorer.score);
         }else{
             alert("This is your first time");
         }
